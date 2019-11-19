@@ -31,6 +31,7 @@ def get_dh_parameters(rotations):
         ]
 
 def translate(dx, dy, dz):
+    """ Return the transformation matrix for the translation through (dx, dy, dz)T """
     return np.matrix([
         [ 1, 0, 0, dx ],
         [ 0, 1, 0, dy ],
@@ -51,11 +52,12 @@ def rotX(alpha):
         [ 0, -np.sin(alpha), np.cos(alpha), 0 ],
         [ 0,  0,             0,             1 ]])
 
+def dh_transformation(d, theta, r, alpha):
+    return rotZ(theta) @ translate(r, 0, d) @ rotX(alpha)
+
 # link 0 is the yellow link (called link 1 in coursework document)
 def dh_transform(point, parameters):
     for p in parameters:
-        point = rotX(p["alpha"]).dot(point)
-        point = translate(p["r"], 0, p["d"]).dot(point)
-        point = rotZ(p["theta"]).dot(point)
+        point = dh_transformation(p['d'], p['theta'], p['r'], p['alpha']).dot(point)
     return point
 
