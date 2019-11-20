@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-import numpy as np
 from functools import reduce
+
+import numpy as np
 
 # all coordinates are in homogenous coordinates
 
