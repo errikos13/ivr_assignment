@@ -15,13 +15,13 @@ class track_target:
         # initialize the node named image_processing
         rospy.init_node('controller', anonymous=True)
         # initialize a subscriber to recieve messages rom a topic named /robot/camera1/image_raw and use callback function to recieve data
-        self.target_x_sub = rospy.Subscriber('/target/x_position_controller/command', Float64, lambda x: track_target(x, None, None))
-        self.target_y_sub = rospy.Subscriber('/target/y_position_controller/command', Float64, lambda y: track_target(None, y, None))
-        self.target_z_sub = rospy.Subscriber('/target/z_position_controller/command', Float64, lambda z: track_target(None, None, z))
+        self.target_x_sub = rospy.Subscriber('/target/x_position_controller/command', Float64, lambda x: self.point_at_target(x, None, None))
+        self.target_y_sub = rospy.Subscriber('/target/y_position_controller/command', Float64, lambda y: self.point_at_target(None, y, None))
+        self.target_z_sub = rospy.Subscriber('/target/z_position_controller/command', Float64, lambda z: self.point_at_target(None, None, z))
         # prepare to publish on joints
         joints = [ rospy.Publisher('/robot/joint{}_position_controller/command'.format(i), Float64, queue_size=10) for i in [1,2,3,4] ]
 
-    def track_target(self, x, y, z):
+    def point_at_target(self, x, y, z):
         if x is not None:
             self.target[0] = x.data
         if y is not None:
