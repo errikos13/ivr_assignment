@@ -36,8 +36,12 @@ class image_converter:
         # Obtain the moments of the binary image
         M = cv2.moments(mask)
         # Calculate pixel coordinates for the centre of the blob
-        cx = int(M['m10'] / M['m00'])
-        cz = int(M['m01'] / M['m00'])
+        if(M['m00'] != 0):
+            cx = int(M['m10'] / M['m00'])
+            cz = int(M['m01'] / M['m00'])
+        else:
+            cx = self.detect_green(image)[0]
+            cz = self.detect_green(image)[1]
         return np.array([cx, cz])
 
     # Detecting the centre of the green circle
@@ -46,8 +50,12 @@ class image_converter:
         kernel = np.ones((5, 5), np.uint8)
         mask = cv2.dilate(mask, kernel, iterations=3)
         M = cv2.moments(mask)
-        cx = int(M['m10'] / M['m00'])
-        cz = int(M['m01'] / M['m00'])
+        if(M['m00'] != 0):
+            cx = int(M['m10'] / M['m00'])
+            cz = int(M['m01'] / M['m00'])
+        else:
+            cx = self.detect_blue(image)[0]
+            cz = self.detect_blue(image)[1]
         return np.array([cx, cz])
 
     # Detecting the centre of the blue circle
@@ -56,8 +64,12 @@ class image_converter:
         kernel = np.ones((5, 5), np.uint8)
         mask = cv2.dilate(mask, kernel, iterations=3)
         M = cv2.moments(mask)
-        cx = int(M['m10'] / M['m00'])
-        cz = int(M['m01'] / M['m00'])
+        if(M['m00'] != 0):
+            cx = int(M['m10'] / M['m00'])
+            cz = int(M['m01'] / M['m00'])
+        else:
+            cx = self.detect_green(image)[0]
+            cz = self.detect_green(image)[1]
         return np.array([cx, cz])
 
     # Detecting the centre of the yellow circle
@@ -105,10 +117,10 @@ class image_converter:
     # Calculate the conversion from pixel to meter
     def pixel2meter(self,image):
         # Obtain the centre of each coloured blob
-        circle1Pos = self.detect_blue(image)
-        circle2Pos = self.detect_green(image)
+        #circle1Pos = self.detect_blue(image)
+        #circle2Pos = self.detect_green(image)
         # find the distance between two circles
-        dist = np.sum((circle1Pos - circle2Pos)**2)
+       # dist = np.sum((circle1Pos - circle2Pos)**2)
         #return 3 / np.sqrt(dist)
         return 0.03703421484500817
 
@@ -121,7 +133,7 @@ class image_converter:
             print(e)
         # Uncomment if you want to save the image
         #cv2.imwrite('image_copy.png', cv_image)
-        #im2=cv2.imshow('window2', self.cv_image2)
+        im2=cv2.imshow('window2', self.cv_image2)
         cv2.waitKey(1)
 
         target_pos = self.detect_target(self.cv_image2)
