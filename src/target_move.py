@@ -5,6 +5,7 @@ import rospy
 from std_msgs.msg import Float64
 from std_msgs.msg import String
 
+
 # Publish data
 def move():
   rospy.init_node('target_pos_cmd', anonymous=True)
@@ -46,12 +47,9 @@ def move():
     rate.sleep()
 
 
-
 # run the code if the node is called
 if __name__ == '__main__':
   try:
     move()
   except rospy.ROSInterruptException:
     pass
-
-

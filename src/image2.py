@@ -11,10 +11,10 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import Float64MultiArray, Float64
 from std_msgs.msg import String
 
-class image_converter:
 
-	# Defines publisher and subscriber
+class image_converter:
     def __init__(self):
+        """ Defines publisher and subscriber """
         # initialize the node named image_processing
         rospy.init_node('image_processing', anonymous=True)
         # initialize a publisher to send images from camera2 to a topic named image_topic2
@@ -25,7 +25,6 @@ class image_converter:
         self.image_sub2 = rospy.Subscriber("/camera2/robot/image_raw",Image,self.callback2)
         # initialize the bridge between openCV and ROS
         self.bridge = CvBridge()
-
 
     def detect_red(self,image):
         # Isolate the blue colour in the image as a binary image
@@ -40,7 +39,6 @@ class image_converter:
         cz = int(M['m01'] / M['m00'])
         return np.array([cx, cz])
 
-
     # Detecting the centre of the green circle
     def detect_green(self,image):
         mask = cv2.inRange(image, (0, 100, 0), (0, 255, 0))
@@ -50,7 +48,6 @@ class image_converter:
         cx = int(M['m10'] / M['m00'])
         cz = int(M['m01'] / M['m00'])
         return np.array([cx, cz])
-
 
     # Detecting the centre of the blue circle
     def detect_blue(self,image):
@@ -77,13 +74,12 @@ class image_converter:
         endPos = a * (self.detect_yellow(image) - self.detect_red(image))
         return endPos
 
-
     def detect_target(self,image):
         mask = cv2.inRange(image, (70, 108, 128), (89, 180, 217))
         # This applies a dilate that makes the binary region larger (the more iterations the larger it becomes)
         kernel = np.ones((5, 5), np.uint8)
         mask = cv2.dilate(mask, kernel, iterations=3)
-       # cv2.imshow('target',mask)
+        # cv2.imshow('target',mask)
         contours,hierarchy = cv2.findContours(mask, 1, 2)
         drawing = np.zeros((mask.shape[0], mask.shape[1], 3), dtype=np.uint8)
         compactness = np.zeros(len(contours))
@@ -93,7 +89,6 @@ class image_converter:
             area = cv2.contourArea(contours[i])
             compactness[i] = (4*np.pi*area)/(perimeter**2)
         circle = np.argmax(compactness)
-
 
         cv2.drawContours(drawing, contours, circle, (0,255,0) )
         #cv2.imshow('Contours', drawing)
@@ -106,7 +101,6 @@ class image_converter:
         cz = a*(cz - center[1])
         return np.array([cx,cz])
 
-
     # Calculate the conversion from pixel to meter
     def pixel2meter(self,image):
         # Obtain the centre of each coloured blob
@@ -116,8 +110,6 @@ class image_converter:
         dist = np.sum((circle1Pos - circle2Pos)**2)
         #return 3 / np.sqrt(dist)
         return 0.03703421484500817
-
-
 
     # Recieve data, process it, and publish
     def callback2(self,data):
@@ -138,16 +130,13 @@ class image_converter:
         self.target_posx = Float64()
         self.target_posx.data = target_pos[0]
 
-
-# Publish the results
+        # Publish the results
         try:
             self.image_pub2.publish(self.bridge.cv2_to_imgmsg(self.cv_image2, "bgr8"))
             self.target_posx_pub.publish(self.target_posx)
             self.end_effectorx_pub.publish(self.end_effectorx)
         except CvBridgeError as e:
             print(e)
-
-
 
 
 # call the class
@@ -159,7 +148,7 @@ def main(args):
         print("Shutting down")
     cv2.destroyAllWindows()
 
+
 # run the code if the node is called
 if __name__ == '__main__':
     main(sys.argv)
-
