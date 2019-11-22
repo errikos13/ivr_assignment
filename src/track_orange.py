@@ -28,7 +28,7 @@ class track_target:
             self.target[1] = y.data
         if z is not None:
             self.target[2] = z.data
-        joint_angles = solve_joint_angles(target)
+        joint_angles = solve_joint_angles(self.target)
         for i in range(4):
             topic_data = Float64(joint_angles[i])
             joints[i].publish(topic_data)
