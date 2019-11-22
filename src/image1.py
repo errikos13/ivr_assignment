@@ -107,7 +107,7 @@ class image_converter:
 
     def detect_end_effector(self,image):
       a = self.pixel2meter(image)
-      endPos = a * (self.detect_yellow(image) - self.detect_red(image))
+      endPos = a * (self.detect_red(image) - self.detect_yellow(image))
       return endPos
 
     # Calculate the conversion from pixel to meter
