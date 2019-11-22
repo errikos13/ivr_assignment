@@ -121,22 +121,16 @@ class image_converter:
         return 0.03703421484500817
 
     def functions(self,t):
-      endPos = self.detect_end_effector(self.cv_image1)
-      a = self.pixel2meter(self.cv_image1)
-      greenPos = a * (self.detect_yellow(self.cv_image1) - self.detect_green(self.cv_image1))
-      f = [0,0,0,0,0]
-
-      f[0] = 3*cos(t[2])*(cos(t[0])*cos(t[1]) - cos(90)*sin(t[0])*sin(t[1])) - 3*sin(t[2])*(sin(90)**2*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]) + cos(90)**2*cos(t[1])*sin(t[0])) - 2*sin(t[3])*(sin(90)*(sin(90)*cos(t[0])*sin(t[1]) - cos(90)*sin(90)*sin(t[0]) + cos(90)*sin(90)*cos(t[1])*sin(t[0])) + cos(90)*cos(t[2])*(sin(90)**2*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]) + cos(90)**2*cos(t[1])*sin(t[0])) + cos(90)*sin(t[2])*(cos(t[0])*cos(t[1]) - cos(90)*sin(t[0])*sin(t[1]))) - 2*cos(t[3])*(sin(t[2])*(sin(90)**2*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]) + cos(90)**2*cos(t[1])*sin(t[0])) - cos(t[2])*(cos(t[0])*cos(t[1]) - cos(90)*sin(t[0])*sin(t[1]))) - self.end_effectorx
-
-      f[1] = 3*sin(t[2])*(sin(90)**2*cos(t[0]) - cos(90)*sin(t[0])*sin(t[1]) + cos(90)**2*cos(t[0])*cos(t[1])) + 3*cos(t[2])*(cos(t[1])*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1])) - 2*sin(t[3])*(sin(90)*(cos(90)*sin(90)*cos(t[0]) + sin(90)*sin(t[0])*sin(t[1]) - cos(90)*sin(90)*cos(t[0])*cos(t[1])) - cos(90)*cos(t[2])*(sin(90)**2*cos(t[0]) - cos(90)*sin(t[0])*sin(t[1]) + cos(90)**2*cos(t[0])*cos(t[1])) + cos(90)*sin(t[2])*(cos(t[1])*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]))) + 2*cos(t[3])*(sin(t[2])*(sin(90)**2*cos(t[0]) - cos(90)*sin(t[0])*sin(t[1]) + cos(90)**2*cos(t[0])*cos(t[1])) + cos(t[2])*(cos(t[1])*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]))) - endPos[0]
-
-      f[2] = 2*cos(t[3])*(sin(t[2])*(cos(90)*sin(90) - cos(90)*sin(90)*cos(t[1])) - sin(90)*cos(t[2])*sin(t[1])) + 2*sin(t[3])*(cos(90)*cos(t[2])*(cos(90)*sin(90) - cos(90)*sin(90)*cos(t[1])) - sin(90)*(sin(90)**2*cos(t[1]) + cos(90)**2) + cos(90)*sin(90)*sin(t[1])*sin(t[2])) + 3*sin(t[2])*(cos(90)*sin(90) - cos(90)*sin(90)*cos(t[1])) - 3*sin(90)*cos(t[2])*sin(t[1]) + 2 - endPos[1]
-
-      f[3] = 3*sin(t[2])*(cos(90)*sin(90) - cos(90)*sin(90)*cos(t[1])) - 3*sin(90)*cos(t[2])*sin(t[1]) + 2 - greenPos[1]
-
-      f[4] = 3*sin(t[2])*(sin(90)**2*cos(t[0]) - cos(90)*sin(t[0])*sin(t[1]) + cos(90)**2*cos(t[0])*cos(t[1])) + 3*cos(t[2])*(cos(t[1])*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1])) - greenPos[0]
-
-      return f
+        endPos = self.detect_end_effector(self.cv_image1)
+        a = self.pixel2meter(self.cv_image1)
+        greenPos = a * (self.detect_yellow(self.cv_image1) - self.detect_green(self.cv_image1))
+        f = [0,0,0,0,0]
+        f[0] = 3*cos(t[2])*(cos(t[0])*cos(t[1]) - cos(90)*sin(t[0])*sin(t[1])) - 3*sin(t[2])*(sin(90)**2*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]) + cos(90)**2*cos(t[1])*sin(t[0])) - 2*sin(t[3])*(sin(90)*(sin(90)*cos(t[0])*sin(t[1]) - cos(90)*sin(90)*sin(t[0]) + cos(90)*sin(90)*cos(t[1])*sin(t[0])) + cos(90)*cos(t[2])*(sin(90)**2*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]) + cos(90)**2*cos(t[1])*sin(t[0])) + cos(90)*sin(t[2])*(cos(t[0])*cos(t[1]) - cos(90)*sin(t[0])*sin(t[1]))) - 2*cos(t[3])*(sin(t[2])*(sin(90)**2*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]) + cos(90)**2*cos(t[1])*sin(t[0])) - cos(t[2])*(cos(t[0])*cos(t[1]) - cos(90)*sin(t[0])*sin(t[1]))) - self.end_effectorx
+        f[1] = 3*sin(t[2])*(sin(90)**2*cos(t[0]) - cos(90)*sin(t[0])*sin(t[1]) + cos(90)**2*cos(t[0])*cos(t[1])) + 3*cos(t[2])*(cos(t[1])*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1])) - 2*sin(t[3])*(sin(90)*(cos(90)*sin(90)*cos(t[0]) + sin(90)*sin(t[0])*sin(t[1]) - cos(90)*sin(90)*cos(t[0])*cos(t[1])) - cos(90)*cos(t[2])*(sin(90)**2*cos(t[0]) - cos(90)*sin(t[0])*sin(t[1]) + cos(90)**2*cos(t[0])*cos(t[1])) + cos(90)*sin(t[2])*(cos(t[1])*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]))) + 2*cos(t[3])*(sin(t[2])*(sin(90)**2*cos(t[0]) - cos(90)*sin(t[0])*sin(t[1]) + cos(90)**2*cos(t[0])*cos(t[1])) + cos(t[2])*(cos(t[1])*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]))) - endPos[0]
+        f[2] = 2*cos(t[3])*(sin(t[2])*(cos(90)*sin(90) - cos(90)*sin(90)*cos(t[1])) - sin(90)*cos(t[2])*sin(t[1])) + 2*sin(t[3])*(cos(90)*cos(t[2])*(cos(90)*sin(90) - cos(90)*sin(90)*cos(t[1])) - sin(90)*(sin(90)**2*cos(t[1]) + cos(90)**2) + cos(90)*sin(90)*sin(t[1])*sin(t[2])) + 3*sin(t[2])*(cos(90)*sin(90) - cos(90)*sin(90)*cos(t[1])) - 3*sin(90)*cos(t[2])*sin(t[1]) + 2 - endPos[1]
+        f[3] = 3*sin(t[2])*(cos(90)*sin(90) - cos(90)*sin(90)*cos(t[1])) - 3*sin(90)*cos(t[2])*sin(t[1]) + 2 - greenPos[1]
+        f[4] = 3*sin(t[2])*(sin(90)**2*cos(t[0]) - cos(90)*sin(t[0])*sin(t[1]) + cos(90)**2*cos(t[0])*cos(t[1])) + 3*cos(t[2])*(cos(t[1])*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1])) - greenPos[0]
+        return f
 
       # Calculate the relevant joint angles from the image
     def detect_joint_angles(self,image):
