@@ -135,9 +135,9 @@ class image_converter:
         return np.array([cy, cz])
 
     def detect_end_effector(self,image):
-      a = self.pixel2meter(image)
-      endPos = a * (self.detect_yellow(image) - self.detect_red(image))
-      return endPos
+        a = self.pixel2meter(image)
+        endPos = a * (self.detect_yellow(image) - self.detect_red(image))
+        return endPos
 
     # Calculate the conversion from pixel to meter
     def pixel2meter(self,image):
@@ -145,7 +145,7 @@ class image_converter:
         #circle1Pos = self.detect_blue(image)
         #circle2Pos = self.detect_green(image)
         # find the distance between two circles
-       # dist = np.sum((circle1Pos - circle2Pos)**2)
+        # dist = np.sum((circle1Pos - circle2Pos)**2)
         #return (3/np.sqrt(dist))
         return 0.03703421484500817
 
