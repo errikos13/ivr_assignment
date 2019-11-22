@@ -19,7 +19,7 @@ class track_target:
         self.target_y_sub = rospy.Subscriber('/target/y_position_controller/command', Float64, lambda y: track_target(None, y, None))
         self.target_z_sub = rospy.Subscriber('/target/z_position_controller/command', Float64, lambda z: track_target(None, None, z))
         # prepare to publish on joints
-        joints = [ rospy.Publisher(f'/robot/joint{i}_position_controller/command', Float64, queue_size=10) for i in [1,2,3,4] ]
+        joints = [ rospy.Publisher('/robot/joint{}_position_controller/command'.format(i), Float64, queue_size=10) for i in [1,2,3,4] ]
 
     def track_target(self, x, y, z):
         if x is not None:
