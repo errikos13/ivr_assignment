@@ -117,11 +117,11 @@ class image_converter:
     # Calculate the conversion from pixel to meter
     def pixel2meter(self,image):
         # Obtain the centre of each coloured blob
-        #circle1Pos = self.detect_blue(image)
-        #circle2Pos = self.detect_green(image)
+        circle1Pos = self.detect_yellow(image)
+        circle2Pos = self.detect_blue(image)
         # find the distance between two circles
-       # dist = np.sum((circle1Pos - circle2Pos)**2)
-        #return 3 / np.sqrt(dist)
+        dist = np.sum((circle1Pos - circle2Pos)**2)
+        return 2.0 / np.sqrt(dist)
         return 0.03703421484500817
 
     # Recieve data, process it, and publish
