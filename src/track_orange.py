@@ -30,7 +30,6 @@ class track_target:
             self.target[2] = z.data
         joint_angles = solve_joint_angles(self.target)
         for i in range(4):
-            print(joint_angles)
             topic_data = Float64(joint_angles[i])
             joints[i].publish(topic_data)
 

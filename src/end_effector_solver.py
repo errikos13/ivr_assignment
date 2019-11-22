@@ -10,7 +10,7 @@ from fk import robot
 def solve_joint_angles(end_effector_pos):
     """ Return joint angles needed to put end effector at end_effector_pos. end_effector_pos is 3x1 array. """
     minimising_function = lambda joint_angles: np.linalg.norm(robot.K(joint_angles) - end_effector_pos)
-    return least_squares(minimising_function, np.zeros(4), bounds=([-np.pi, -np.pi/2, -np.pi/2, -np.pi/2], [np.pi, np.pi/2, np.pi/2, np.pi/2]))
+    return least_squares(minimising_function, np.zeros(4), bounds=([-np.pi, -np.pi/2, -np.pi/2, -np.pi/2], [np.pi, np.pi/2, np.pi/2, np.pi/2])).x
 
 
 def jacobian(q):
