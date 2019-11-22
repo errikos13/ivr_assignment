@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 
-
-import rospy
 import numpy as np
-from std_msgs.msg import String
+import rospy
 from std_msgs.msg import Float64
-
+from std_msgs.msg import String
 
 # Publish data
 def move():
