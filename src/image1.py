@@ -142,12 +142,12 @@ class image_converter:
     # Calculate the conversion from pixel to meter
     def pixel2meter(self,image):
         # Obtain the centre of each coloured blob
-        #circle1Pos = self.detect_blue(image)
-        #circle2Pos = self.detect_green(image)
+        circle1Pos = self.detect_yellow(image)
+        circle2Pos = self.detect_blue(image)
         # find the distance between two circles
-        # dist = np.sum((circle1Pos - circle2Pos)**2)
-        #return (3/np.sqrt(dist))
-        return 0.03703421484500817
+        dist = np.sum((circle1Pos - circle2Pos)**2)
+        return (2/np.sqrt(dist))
+        
 
     def functions(self,t):
         endPos = self.detect_end_effector(self.cv_image1)
@@ -229,9 +229,9 @@ class image_converter:
         if self.end_effectorx is not None and self.cv_image1 is not None:
             endPos = self.detect_end_effector(self.cv_image1)
             endPos = [self.end_effectorx, endPos[0], endPos[1]]
-            #a = solve_joint_angles(endPos)
-            #self.joints = Float64MultiArray()
-            #self.joints.data = a
+            a = solve_joint_angles(endPos)
+            self.joints = Float64MultiArray()
+            self.joints.data = a
 
             target_pos = self.detect_target(self.cv_image1)
             self.target_posy = Float64()
