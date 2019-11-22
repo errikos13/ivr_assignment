@@ -12,7 +12,8 @@ def jacobian(a, b, c, d):
         [0,
             -3*np.cos(b)*np.cos(c)-2*np.cos(b)*np.cos(c)*np.cos(d)+2*np.sin(b)*np.sin(d),
             3*np.sin(b)*np.sin(c)+2*np.cos(d)*np.sin(b)*np.sin(c),
-            -2*np.cos(b)*np.cos(d)+2*np.cos(c)*np.sin(b)*np.sin(d)],
-        [0,0,1,0],
-        [0,1,0,1],
-        [1,0,0,0]])
+            -2*np.cos(b)*np.cos(d)+2*np.cos(c)*np.sin(b)*np.sin(d)]])
+        # only need x, y, z parts of Jacobian. Here are the angular velocity components anyway.
+        #  [0,0,1,0],
+        #  [0,1,0,1],
+        #  [1,0,0,0]])
