@@ -1,5 +1,21 @@
-def jacobian(a, b, c, d):
+#!/usr/bin/env python
+
+import numpy as np
+from scipy.optimize import least_squares
+
+from fk import robot
+
+
+def get_joint_angles_for(x, y, z):
+    minimising_function = lambda joint_angles: np.linalg.norm(robot.K(joint_angles) - np.array([x, y, z]))
+    return least_squares(minimising_function, np.zeros(4), bounds=([-np.pi, -np.pi/2, -np.pi/2, -np.pi/2], [np.pi, np.pi/2, np.pi/2, np.pi/2]))
+
+
+def jacobian(q):
     """ a, b, c, d are the thetas for each link """
+    a, b, c, d = q
+    a -= np.pi/2
+    b -= np.pi/2
     return np.matrix([
         [-3*np.cos(b)*np.cos(c)*np.sin(a)-3*np.cos(a)*np.sin(c)+2*np.cos(d)*(-np.cos(b)*np.cos(c)*np.sin(a)-np.cos(a)*np.sin(c))+2*np.sin(a)*np.sin(b)*np.sin(d),
             -3*np.cos(a)*np.cos(c)*np.sin(b)-2*np.cos(a)*np.cos(c)*np.cos(d)*np.sin(b)-2*np.cos(a)*np.cos(b)*np.sin(d),
@@ -13,7 +29,6 @@ def jacobian(a, b, c, d):
             -3*np.cos(b)*np.cos(c)-2*np.cos(b)*np.cos(c)*np.cos(d)+2*np.sin(b)*np.sin(d),
             3*np.sin(b)*np.sin(c)+2*np.cos(d)*np.sin(b)*np.sin(c),
             -2*np.cos(b)*np.cos(d)+2*np.cos(c)*np.sin(b)*np.sin(d)]])
-        # only need x, y, z parts of Jacobian. Here are the angular velocity components anyway.
         #  [0,0,1,0],
         #  [0,1,0,1],
         #  [1,0,0,0]])
