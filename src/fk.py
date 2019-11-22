@@ -53,7 +53,9 @@ class Robot:
     def K(self, joint_angles):
         """ Return the 3x1 vector of the location of the end effector for input joint angles. """
         theta = [ self.theta[i] + joint_angles[i] for i in range(len(joint_angles)) ]
-        return robot_matrix(self.d, theta, self.r, self.alpha).dot(self.origin).A1[:3]
+        y_correction = robot_matrix(self.d, theta, self.r, self.alpha).dot(self.origin).A1[:3]
+        y_correction[1] = -y_correction[1]
+        return y_correction
 
 
 """ Our robot. """
