@@ -45,7 +45,7 @@ class image_converter:
       cy = int(M['m10'] / M['m00'])
       cz = int(M['m01'] / M['m00'])
       return np.array([cy, cz])
-      
+
   def detect_target(self,image):
     mask = cv2.inRange(image, (70, 108, 128), (89, 180, 217))
     # This applies a dilate that makes the binary region larger (the more iterations the larger it becomes)
@@ -62,8 +62,8 @@ class image_converter:
         area = cv2.contourArea(contours[i])
         compactness[i] = (4*np.pi*area)/(perimeter**2)
     circle = np.argmax(compactness)
-    
-    
+
+
     cv2.drawContours(drawing, contours, circle, (0,255,0) )
     cv2.imshow('Contours', drawing)
     M = cv2.moments(contours[circle])
@@ -74,11 +74,11 @@ class image_converter:
     cy = a*(cy - center[0])
     cz = -a*(cz - center[1])
     return np.array([cy,cz])
-    
-      
-    
-  
- 
+
+
+
+
+
 
   # Detecting the centre of the green circle
   def detect_green(self,image):
@@ -110,8 +110,8 @@ class image_converter:
       cy = int(M['m10'] / M['m00'])
       cz = int(M['m01'] / M['m00'])
       return np.array([cy, cz])
-      
-  
+
+
   def detect_end_effector(self,image):
     a = self.pixel2meter(image)
     endPos = a * (self.detect_yellow(image) - self.detect_red(image))
@@ -129,31 +129,31 @@ class image_converter:
       return 0.03703421484500817
 
 
-    
+
   def functions(self,t):
     endPos = self.detect_end_effector(self.cv_image1)
     a = self.pixel2meter(self.cv_image1)
     greenPos = a * (self.detect_yellow(self.cv_image1) - self.detect_green(self.cv_image1))
     f = [0,0,0,0,0]
-        
-    f[0] = 3*cos(t[2])*(cos(t[0])*cos(t[1]) - cos(90)*sin(t[0])*sin(t[1])) - 3*sin(t[2])*(sin(90)**2*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]) + cos(90)**2*cos(t[1])*sin(t[0])) - 2*sin(t[3])*(sin(90)*(sin(90)*cos(t[0])*sin(t[1]) - cos(90)*sin(90)*sin(t[0]) + cos(90)*sin(90)*cos(t[1])*sin(t[0])) + cos(90)*cos(t[2])*(sin(90)**2*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]) + cos(90)**2*cos(t[1])*sin(t[0])) + cos(90)*sin(t[2])*(cos(t[0])*cos(t[1]) - cos(90)*sin(t[0])*sin(t[1]))) - 2*cos(t[3])*(sin(t[2])*(sin(90)**2*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]) + cos(90)**2*cos(t[1])*sin(t[0])) - cos(t[2])*(cos(t[0])*cos(t[1]) - cos(90)*sin(t[0])*sin(t[1]))) - self.end_effectorx 
-        
+
+    f[0] = 3*cos(t[2])*(cos(t[0])*cos(t[1]) - cos(90)*sin(t[0])*sin(t[1])) - 3*sin(t[2])*(sin(90)**2*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]) + cos(90)**2*cos(t[1])*sin(t[0])) - 2*sin(t[3])*(sin(90)*(sin(90)*cos(t[0])*sin(t[1]) - cos(90)*sin(90)*sin(t[0]) + cos(90)*sin(90)*cos(t[1])*sin(t[0])) + cos(90)*cos(t[2])*(sin(90)**2*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]) + cos(90)**2*cos(t[1])*sin(t[0])) + cos(90)*sin(t[2])*(cos(t[0])*cos(t[1]) - cos(90)*sin(t[0])*sin(t[1]))) - 2*cos(t[3])*(sin(t[2])*(sin(90)**2*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]) + cos(90)**2*cos(t[1])*sin(t[0])) - cos(t[2])*(cos(t[0])*cos(t[1]) - cos(90)*sin(t[0])*sin(t[1]))) - self.end_effectorx
+
     f[1] = 3*sin(t[2])*(sin(90)**2*cos(t[0]) - cos(90)*sin(t[0])*sin(t[1]) + cos(90)**2*cos(t[0])*cos(t[1])) + 3*cos(t[2])*(cos(t[1])*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1])) - 2*sin(t[3])*(sin(90)*(cos(90)*sin(90)*cos(t[0]) + sin(90)*sin(t[0])*sin(t[1]) - cos(90)*sin(90)*cos(t[0])*cos(t[1])) - cos(90)*cos(t[2])*(sin(90)**2*cos(t[0]) - cos(90)*sin(t[0])*sin(t[1]) + cos(90)**2*cos(t[0])*cos(t[1])) + cos(90)*sin(t[2])*(cos(t[1])*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]))) + 2*cos(t[3])*(sin(t[2])*(sin(90)**2*cos(t[0]) - cos(90)*sin(t[0])*sin(t[1]) + cos(90)**2*cos(t[0])*cos(t[1])) + cos(t[2])*(cos(t[1])*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1]))) - endPos[0]
-        
+
     f[2] = 2*cos(t[3])*(sin(t[2])*(cos(90)*sin(90) - cos(90)*sin(90)*cos(t[1])) - sin(90)*cos(t[2])*sin(t[1])) + 2*sin(t[3])*(cos(90)*cos(t[2])*(cos(90)*sin(90) - cos(90)*sin(90)*cos(t[1])) - sin(90)*(sin(90)**2*cos(t[1]) + cos(90)**2) + cos(90)*sin(90)*sin(t[1])*sin(t[2])) + 3*sin(t[2])*(cos(90)*sin(90) - cos(90)*sin(90)*cos(t[1])) - 3*sin(90)*cos(t[2])*sin(t[1]) + 2 - endPos[1]
-        
+
     f[3] = 3*sin(t[2])*(cos(90)*sin(90) - cos(90)*sin(90)*cos(t[1])) - 3*sin(90)*cos(t[2])*sin(t[1]) + 2 - greenPos[1]
-    
+
     f[4] = 3*sin(t[2])*(sin(90)**2*cos(t[0]) - cos(90)*sin(t[0])*sin(t[1]) + cos(90)**2*cos(t[0])*cos(t[1])) + 3*cos(t[2])*(cos(t[1])*sin(t[0]) + cos(90)*cos(t[0])*sin(t[1])) - greenPos[0]
-    
-     
- 
-        
+
+
+
+
     return f
-        
-        
-        
-        
+
+
+
+
     # Calculate the relevant joint angles from the image
   def detect_joint_angles(self,image):
     t0 = np.array([1,1,1,1])
@@ -163,7 +163,7 @@ class image_converter:
     bu1 = (np.pi)/2
     res_1 = least_squares(self.functions, t0 , bounds=([bl0, bl1, bl1, bl1], [bu0, bu1, bu1, bu1]))
     return res_1.x
- 
+
 
   # Recieve data from camera 1, process it, and publish
   def callback1(self,data):
@@ -172,58 +172,58 @@ class image_converter:
       self.cv_image1 = self.bridge.imgmsg_to_cv2(data, "bgr8")
     except CvBridgeError as e:
       print(e)
-    
+
     # Uncomment if you want to save the image
     #cv2.imwrite('image_copy.png', cv_image)
     im1=cv2.imshow('window1', self.cv_image1)
     cv2.waitKey(1)
     self.processing()
-    
-      
-      
-      
+
+
+
+
   def target_callback(self,data):
     # Recieve the image
     self.end_effectorx = data.data
-    
-    
+
+
     # Uncomment if you want to save the image
     #cv2.imwrite('image_copy.png', cv_image)
     self.processing()
-    
-    
-   
-      
+
+
+
+
   def processing(self):
-    #if self.end_effectorx is not None and 
+    #if self.end_effectorx is not None and
     if self.cv_image1 is not None:
-    
-    
-   
-    
+
+
+
+
         #a = self.detect_joint_angles(self.cv_image1)
         #self.joints = Float64MultiArray()
         #self.joints.data = a
 
-        
+
         target_pos = self.detect_target(self.cv_image1)
         self.target_posy = Float64()
         self.target_posy.data = target_pos[0]
-        
+
         self.target_posz = Float64()
         self.target_posz.data = target_pos[1]
         #self.target_pos = np.array(self.target_posx, self.target_posy, self.target_posz)
-        
+
         # Publish the results
-        try: 
+        try:
           self.image_pub1.publish(self.bridge.cv2_to_imgmsg(self.cv_image1, "bgr8"))
          # self.joints_pub.publish(self.joints)
           self.target_posy_pub.publish(self.target_posy)
           self.target_posz_pub.publish(self.target_posz)
-	    
+
         except CvBridgeError as e:
           print(e)
-	
+
 
 # call the class
 def main(args):

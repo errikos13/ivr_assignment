@@ -71,13 +71,13 @@ class image_converter:
         cx = int(M['m10'] / M['m00'])
         cz = int(M['m01'] / M['m00'])
         return np.array([cx, cz])
-        
+
     def detect_end_effector(self,image):
         a = self.pixel2meter(image)
         endPos = a * (self.detect_yellow(image) - self.detect_red(image))
         return endPos
-        
-        
+
+
     def detect_target(self,image):
         mask = cv2.inRange(image, (70, 108, 128), (89, 180, 217))
         # This applies a dilate that makes the binary region larger (the more iterations the larger it becomes)
@@ -93,8 +93,8 @@ class image_converter:
             area = cv2.contourArea(contours[i])
             compactness[i] = (4*np.pi*area)/(perimeter**2)
         circle = np.argmax(compactness)
-    
-    
+
+
         cv2.drawContours(drawing, contours, circle, (0,255,0) )
         #cv2.imshow('Contours', drawing)
         M = cv2.moments(contours[circle])
@@ -118,7 +118,7 @@ class image_converter:
         return 0.03703421484500817
 
 
-    
+
     # Recieve data, process it, and publish
     def callback2(self,data):
         # Recieve the image
@@ -130,24 +130,24 @@ class image_converter:
         #cv2.imwrite('image_copy.png', cv_image)
         #im2=cv2.imshow('window2', self.cv_image2)
         cv2.waitKey(1)
-        
+
         target_pos = self.detect_target(self.cv_image2)
         endPos = self.detect_end_effector(self.cv_image2)
         self.end_effectorx = Float64()
         self.end_effectorx.data = endPos[0]
         self.target_posx = Float64()
         self.target_posx.data = target_pos[0]
-       
+
 
 # Publish the results
-        try: 
+        try:
             self.image_pub2.publish(self.bridge.cv2_to_imgmsg(self.cv_image2, "bgr8"))
             self.target_posx_pub.publish(self.target_posx)
             self.end_effectorx_pub.publish(self.end_effectorx)
         except CvBridgeError as e:
             print(e)
 
-   
+
 
 
 # call the class
