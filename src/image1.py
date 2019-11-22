@@ -146,7 +146,7 @@ class image_converter:
         circle2Pos = self.detect_blue(image)
         # find the distance between two circles
         dist = np.sum((circle1Pos - circle2Pos)**2)
-        return (2/np.sqrt(dist))
+        return (2.0/np.sqrt(dist))
         
 
     def functions(self,t):
