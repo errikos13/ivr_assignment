@@ -19,7 +19,7 @@ class track_target:
         self.target_y_sub = rospy.Subscriber('/target/y_position_controller/command', Float64, lambda y: self.point_at_target(None, y, None))
         self.target_z_sub = rospy.Subscriber('/target/z_position_controller/command', Float64, lambda z: self.point_at_target(None, None, z))
         # prepare to publish on joints
-        joints = [ rospy.Publisher('/robot/joint{}_position_controller/command'.format(i), Float64, queue_size=10) for i in [1,2,3,4] ]
+        self.joints = [ rospy.Publisher('/robot/joint{}_position_controller/command'.format(i), Float64, queue_size=10) for i in [1,2,3,4] ]
 
     def point_at_target(self, x, y, z):
         if x is not None:
@@ -31,7 +31,7 @@ class track_target:
         joint_angles = solve_joint_angles(self.target)
         for i in range(4):
             topic_data = Float64(joint_angles[i])
-            joints[i].publish(topic_data)
+            self.joints[i].publish(topic_data)
 
 
 # run the code if the node is called
