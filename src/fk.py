@@ -32,7 +32,7 @@ def rotX(alpha):
 
 
 def link_matrix(d, theta, r, alpha):
-    return rotZ(theta).dot(translate(r, 0, d)).dot(tX(alpha))
+    return rotZ(theta).dot(translate(r, 0, d)).dot(rotX(alpha))
 
 
 def robot_matrix(d, theta, r, alpha):
